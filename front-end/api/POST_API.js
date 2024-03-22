@@ -3,6 +3,9 @@ const POST_API = () => {
     createOnetimeQr: "/qr",
     checkQr: "/check",
     createAccount: "/account",
+
+    
+    
   };
 };
 

@@ -13,6 +13,7 @@ const parkingSchema = new mongoose.Schema(
     openTime: Date,
     address: String,
     ownerName: String,
+    ownerPublicKey: String,
     fare: [Number],
     maximumCapacity: Number,
     service: [String],

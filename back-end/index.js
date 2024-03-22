@@ -126,22 +126,71 @@ app.post("/check", async (req, res) => {
 app.post("/account", async (req, res) => {
   try {
     const { publickey } = req.body;
-    await UserModel.create({
-      publickey,
-      randomString: uuidv4(),
-    });
-    qrcode.toDataURL(JSON.stringify(publickey), (err, url) => {
-      if (err) {
-        console.error("Error generating QR code", err);
-        return res.status(500).send("Error generating QR code");
-      }
-      res.status(200).json({ qrCode: url });
-    });
+
+    let tmp_user = await UserModel.findOne({ publickey: publickey });
+    let randomString = uuidv4();
+    let data = {
+      publickey: publickey,
+      randomString: null,
+    };
+    if (!tmp_user) {
+      console.log("user not found");
+
+      await UserModel.create({
+        publickey: publickey,
+        randomString: randomString,
+      });
+
+      data.randomString = randomString;
+      qrcode.toDataURL(JSON.stringify(data), (err, url) => {
+        if (err) {
+          console.error("Error generating QR code", err);
+          return res.status(500).send("Error generating QR code");
+        }
+        res.status(200).json({ qrCode: url });
+      });
+    } else {
+      console.log("user found");
+      data.randomString = tmp_user.randomString;
+      qrcode.toDataURL(JSON.stringify(data), (err, url) => {
+        if (err) {
+          console.error("Error generating QR code", err);
+          return res.status(500).send("Error generating QR code");
+        }
+        res.status(200).json({ qrCode: url });
+      });
+    }
   } catch (error) {
     console.error("Error in /createAccount route", error);
     res.status(500).send("Internal Server Error");
   }
 });
+
+app.post("createParking", async (req, res) => {
+  try {
+    const { name, address, owner } = req.body;
+    let user = await UserModel.findOne({ publickey: owner });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const parking = await ParkingModel.create({
+      name,
+      address,
+      owner: user._id,
+    });
+
+    user.parkingOwner = parking._id;
+    await user.save();
+
+    res.status(200).json(parking);
+  } catch (error) {
+    console.error("Error in /createParking route", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 
 app.delete("/qr/:carNumber", async (req, res) => {
   try {

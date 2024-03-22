@@ -12,7 +12,7 @@ const checkVehicleType = (plate) => {
 };
 
 const calculateFee = (vehicleType) => {
-    var fee=0
+    let fee=0
     if(vehicleType==="car"){
         fee+=100
     }
