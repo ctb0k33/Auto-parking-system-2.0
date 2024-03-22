@@ -24,18 +24,14 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  horizontalView: {
-    marginHorizontal: 12,
-  },
   comment: {
     display: "flex",
     flexDirection: "column",
-    width: width * 0.8,
+    width: width - 48,
     height: 120,
     padding: 12,
     backgroundColor: "#b8e0e6",
     borderRadius: 10,
-    marginRight: 8,
     justifyContent: "space-between",
   },
   starIcon: {

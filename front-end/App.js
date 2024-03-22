@@ -15,11 +15,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="ConnectWallet">
-        <Drawer.Screen name="ConnectWallet" component={ConnectWallet} />
-        <Drawer.Screen name="ParkingDetail" component={ParkingDetail} />
-        <Drawer.Screen name="ParkingList" component={ParkingList} />
-        <Drawer.Screen name="AddEditParking" component={AddEditParking} />
-        <Drawer.Screen name="Qr" component={Qr} />
+        <Drawer.Screen name="Connect Wallet" component={ConnectWallet} />
+        <Drawer.Screen name="Parking Detail" component={ParkingDetail} />
+        <Drawer.Screen name="Parking List" component={ParkingList} />
+        <Drawer.Screen name="AddEdit Parking" component={AddEditParking} />
+        <Drawer.Screen name="QR" component={Qr} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

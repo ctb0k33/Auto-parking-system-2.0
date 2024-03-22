@@ -1,25 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Image, FlatList } from "react-native";
+import asyncStorate from '@react-native-async-storage/async-storage';
 import styles from './Qr_detail.style';
 
 export default function QrDetail() {
-  const fakeQR = require('../../assets/images/qr1.png');
-  const [qrImage, setQrImage] = useState(fakeQR);
-
-  const handlePressQrInitial = () => {
-    setQrImage(fakeQR);
-  };
-
-  const handlePressQrOneTime = () => {
-    setQrImage(fakeQR);
-  };
-
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const getPrivateQr = async () => {
+      const qr = await asyncStorate.getItem("Private QR");
+      data = data.push({id: 1, label: "Private QR", image: {uri: qr.trim()}});
+      setData(data)
+    };
+    getPrivateQr();
+  },[])
   // Sample data for FlatList
-  const data = [
-    { id: '1', image: qrImage, label: 'QR initial'},
-    { id: '2', image: qrImage, label: 'QR one time' },
-    // Add more items as needed
-  ];
 
   return (
     <View style={styles.container}>
