@@ -5,8 +5,7 @@ import qrcode from "qrcode";
 import OnetimeQrModel from "./models/OnetimeQr.js";
 import ParkingModel from "./models/Parking.js";
 import UserModel from "./models/User.js";
-import CommentModel from "./models/Comment.js";
-
+import { checkVehicleType, calculateFee } from "./utils/fee.js";
 const app = express();
 const port = 3000;
 
@@ -15,72 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
-});
-
-app.post("/createQr", async (req, res) => {
-  try {
-    const { publicKey, carNumber } = req.body;
-    console.log(req.body);
-
-    const qrCode = {
-      id: uuidv4(),
-      publicKey,
-      carNumber,
-    };
-
-    await OnetimeQrModel.create(qrCode);
-
-    qrcode.toDataURL(JSON.stringify(qrCode), (err, url) => {
-      if (err) {
-        console.error("Error generating QR code", err);
-        return res.status(500).send("Error generating QR code");
-      }
-      res.status(200).json({ qrCode: url });
-    });
-  } catch (error) {
-    console.error("Error in /create1qr route", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.post("/checkQr", async (req, res) => {
-  try {
-    const { qrCode } = req.body;
-    const qr = await OnetimeQrModel.findOne;
-  } catch (error) {
-    console.error("Error in /checkQr route", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.post("/createAcccount", async (req, res) => {
-  try {
-    const { publickey } = req.body;
-    await UserModel.create({
-      publickey,
-    });
-    qrcode.toDataURL(JSON.stringify(publickey), (err, url) => {
-      if (err) {
-        console.error("Error generating QR code", err);
-        return res.status(500).send("Error generating QR code");
-      }
-      res.status(200).json({ qrCode: url });
-    });
-  } catch (error) {
-    console.error("Error in /createAccount route", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.delete("/deleteQr/:carNumber", async (req, res) => {
-  try {
-    const { carNumber } = req.params;
-    await OnetimeQrModel.deleteOne({ carNumber });
-    res.status(200).send("Deleted");
-  } catch (error) {
-    console.error("Error in /deleteQr route", error);
-    res.status(500).send("Internal Server Error");
-  }
 });
 
 app.get("/parking", async (req, res) => {
@@ -93,7 +26,7 @@ app.get("/parking", async (req, res) => {
   }
 });
 
-app.get("/parking/:id", async (req, res) => {
+app.get("/parkingRegisted/:id", async (req, res) => {
   try {
     const parkingRegistered = await UserModel.find({
       _id: req.params.id,
@@ -123,6 +56,100 @@ app.get("/1qr", async (req, res) => {
     res.status(200).json(qr);
   } catch (error) {
     console.error("Error in /1qr route", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post("/qr", async (req, res) => {
+  try {
+    const { publicKey, carNumber, randomString } = req.body;
+    let user = await UserModel.findOne({ publickey: publicKey });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    if (user.randomString !== randomString) {
+      return res.status(401).send("Invalid random string");
+    }
+
+    console.log(req.body);
+
+    const qrCode = {
+      randomString: uuidv4(),
+      publicKey,
+      carNumber,
+    };
+
+    await OnetimeQrModel.create(qrCode);
+
+    qrcode.toDataURL(JSON.stringify(qrCode), (err, url) => {
+      if (err) {
+        console.error("Error generating QR code", err);
+        return res.status(500).send("Error generating QR code");
+      }
+      res.status(200).json({ qrCode: url });
+    });
+  } catch (error) {
+    console.error("Error in /create1qr route", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post("/check", async (req, res) => {
+  try {
+    const { qrCode } = req.body;
+    const qr = await OnetimeQrModel.findOne({ id: qrCode.id });
+    if (!qr) {
+      return res.status(404).send("QR code not found");
+    }
+
+    if (qr.publicKey !== qrCode.publicKey) {
+      return res.status(401).send("Invalid public key");
+    }
+
+    if (qr.carNumber !== qrCode.carNumber) {
+      return res.status(401).send("Invalid car number");
+    }
+
+    if (qr.randomString !== qrCode.randomString) {
+      return res.status(401).send("Invalid qr");
+    }
+
+    const fee = calculateFee(checkVehicleType(qr.carNumber));
+    res.status(200).json({ fee: fee });
+  } catch (error) {
+    console.error("Error in /checkQr route", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post("/account", async (req, res) => {
+  try {
+    const { publickey } = req.body;
+    await UserModel.create({
+      publickey,
+      randomString: uuidv4(),
+    });
+    qrcode.toDataURL(JSON.stringify(publickey), (err, url) => {
+      if (err) {
+        console.error("Error generating QR code", err);
+        return res.status(500).send("Error generating QR code");
+      }
+      res.status(200).json({ qrCode: url });
+    });
+  } catch (error) {
+    console.error("Error in /createAccount route", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.delete("/qr/:carNumber", async (req, res) => {
+  try {
+    const { carNumber } = req.params;
+    await OnetimeQrModel.deleteOne({ carNumber });
+    res.status(200).send("Deleted");
+  } catch (error) {
+    console.error("Error in /deleteQr route", error);
     res.status(500).send("Internal Server Error");
   }
 });

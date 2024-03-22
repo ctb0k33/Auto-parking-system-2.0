@@ -6,7 +6,7 @@ const onetimeQrSchema = new mongoose.Schema(
     randomString: String,
     type: String,
     carNumber: String,
-    fare: Number,
+    randomString: String,
   },
   {
     timestamps: true,

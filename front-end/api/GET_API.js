@@ -1,7 +1,11 @@
-const GET_API = () => {
+const GET_API = (id) => {
   return {
+    hello:"/",
     testGet:"/breeds/image/random",
-    getAllParking:"/parking"
+    getAllParking:"/parking",
+    getParkingRegisted: `/parkingRegisted/${id}`,
+    getParkingOwner:`/parkingOwner/${id}`,
+
   };
 };
 
