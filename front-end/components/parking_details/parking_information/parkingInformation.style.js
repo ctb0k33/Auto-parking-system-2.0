@@ -1,0 +1,80 @@
+import { StyleSheet } from "react-native";
+export const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    flexDirection: "row",
+    position: "relative",
+    alignItems: "space-between",
+    gap: 10,
+    padding: 12,
+    paddingTop: 4,
+  },
+  rating: {
+    display: "flex",
+    height: 85,
+    flexDirection: "column",
+    alignItems: "",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 12,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5.62,
+    elevation: 8,
+  },
+  starIcon: {
+    width: 20,
+    height: 20,
+  },
+  ratingText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginRight: 5,
+    color: "#008DDA",
+  },
+  commentNum: {
+    fontSize: 14,
+  },
+  map: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    gap: 5,
+    padding: 12,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    height: 85,
+    shadowOpacity: 0.2,
+    shadowRadius: 5.62,
+    elevation: 8,
+  },
+  mapIcon: {
+    width: 20,
+    height: 20,
+    transform: [{ translateY: 1 }],
+  },
+  address: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "black",
+  },
+  viewOnMap: {
+    fontSize: 16,
+    color: "#008DDA",
+    fontWeight: "bold",
+    marginLeft: 2,
+  },
+  map2: {
+    width: 18,
+    height: 18,
+  },
+});
