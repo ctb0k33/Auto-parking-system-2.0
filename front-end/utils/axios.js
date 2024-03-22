@@ -1,17 +1,14 @@
-import axios from 'axios';
+import axios from "axios";
 
-const url = 'http://127.0.0.1:3000';
+const url = "http://192.168.2.110:3000";
 
-const axiosInstance = axios.create(
-    {
-        baseURL: url,
-        responseType: 'json',
-        withCredentials: true,
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    }
-)
+const axiosInstance = axios.create({
+  baseURL: url,
+  responseType: "json",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 export default axiosInstance;
-

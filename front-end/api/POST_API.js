@@ -1,11 +1,9 @@
 const POST_API = () => {
-    return {
-      createQr: "/createQr",
-      checkQr: "/checkQr",
-      createAccount: "/createAcccount",
-      deleteQr: "/deleteQr"
-    };
+  return {
+    createOnetimeQr: "/qr",
+    checkQr: "/check",
+    createAccount: "/account",
   };
-  
-  export default POST_API;
-  
+};
+
+export default POST_API;

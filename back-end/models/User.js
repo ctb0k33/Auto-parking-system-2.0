@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 const userSchema = new mongoose.Schema(
   {
     publickey: String,
+    randomString: String,
     name: String,
     email: String,
     password: String,

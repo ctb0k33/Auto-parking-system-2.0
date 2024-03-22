@@ -14,7 +14,6 @@ export default function ParkingComment(comments) {
         >
           {commentList.length > 0 &&
             commentList.map((item, index) => {
-              console.log(item + "ad");
               return (
                 <View style={styles.comment} key={index}>
                   <Text style={{ fontWeight: "bold" }}>{item.content}</Text>
