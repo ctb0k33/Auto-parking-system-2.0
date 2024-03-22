@@ -21,6 +21,8 @@ import { styles } from "./ConnectWallet.style";
 import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../utils/axios";
 import { GET_API } from "../../api";
+
+import { POST_API } from '../../api';
 global.Buffer = global.Buffer || Buffer;
 
 const onConnectRedirectLink = Linking.createURL("onConnect");
@@ -131,6 +133,8 @@ export default function ConnectWallet() {
     if (publicKey) {
       const balance = await connection.getBalance(publicKey);
       setBalance(balance / LAMPORTS_PER_SOL);
+      const response = await axiosInstance.post(POST_API().createAccount, {publicKey});
+      console.log("response" , response);
     }
   };
 
