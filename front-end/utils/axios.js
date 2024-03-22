@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'https://dog.ceo/api';
+const url = 'http://127.0.0.1:3000';
 
 const axiosInstance = axios.create(
     {
