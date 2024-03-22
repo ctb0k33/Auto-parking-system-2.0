@@ -1,6 +1,7 @@
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import ParkingDetail from "./screens/parking_detail/ParkingDetail";
 import ConnectWallet from "./screens/connect_wallet/ConnectWallet";
 import ParkingList from "./screens/ParkingList";
@@ -8,17 +9,18 @@ import AddEditParking from "./screens/AddEditParking";
 import Qr from "./screens/qr/Qr";
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ConnectWallet">
-        <Stack.Screen name="ConnectWallet" component={ConnectWallet} />
-        <Stack.Screen name="ParkingDetail" component={ParkingDetail} />
-        <Stack.Screen name="ParkingList" component={ParkingList} />
-        <Stack.Screen name="AddEditParking" component={AddEditParking} />
-        <Stack.Screen name="Qr" component={Qr} />
-      </Stack.Navigator>
+      <Drawer.Navigator initialRouteName="ConnectWallet">
+        <Drawer.Screen name="ConnectWallet" component={ConnectWallet} />
+        <Drawer.Screen name="ParkingDetail" component={ParkingDetail} />
+        <Drawer.Screen name="ParkingList" component={ParkingList} />
+        <Drawer.Screen name="AddEditParking" component={AddEditParking} />
+        <Drawer.Screen name="Qr" component={Qr} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }
