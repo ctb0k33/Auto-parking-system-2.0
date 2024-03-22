@@ -1,5 +1,5 @@
 import { View, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 import { styles } from "./parkingDetails.style";
 import { commentList } from "../../data/comment";
 import { parkingList } from "../../data/parkingList";
@@ -9,22 +9,19 @@ import ParkingInformation from "../../components/parking_details/parking_informa
 import ParkingComment from "../../components/parking_details/parking_comment/ParkingComment";
 import ParkingRegister from "../../components/parking_details/parking_register/ParkingRegister";
 import { useEffect } from "react";
-import axios from "axios"
-import { GET_API } from "../../api";
 import axiosInstance from "../../utils/axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ParkingDetail() {
   const fakeData = parkingList[0];
-
-  const testAPI = async () => {
-    console.log("abcd");
-    axiosInstance.get("").then((res) => {
-      console.log(res);
-    });
-  };
+  const [item, setItem] = useState(null);
+  const QRImage = async() =>{
+    const qrImage = await AsyncStorage.getItem("Private QR: ");
+    setItem(qrImage);
+  }
   useEffect(() => {
-    testAPI();
-  }, []);
+    QRImage()
+  }, [item]);
   return (
     // <SafeAreaView>
     <ScrollView>
