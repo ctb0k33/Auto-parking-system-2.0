@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Button, Alert, Pressable, TextInput } from "react-native";
+import { View, Text, Button, Pressable, TextInput } from "react-native";
 import { Modal } from "../../common/Modal";
 import { styles } from "./parkingRegister.style";
 
@@ -43,8 +43,9 @@ export default function ParkingRegister({ contractId }) {
       <Modal isOpen={modalState}>
         <View style={styles.modal}>
           <Text style={styles.modalTitle}>Register</Text>
-          <Text>
-            Contract Id: <Text>{contractId}</Text>
+          <Text style={{ fontWeight: "bold" }}>
+            Contract Id:{" "}
+            <Text style={{ fontWeight: "normal" }}>{contractId}</Text>
           </Text>
           <View
             style={{
@@ -54,22 +55,32 @@ export default function ParkingRegister({ contractId }) {
               alignItems: "center",
             }}
           >
-            <Text>Add fund:</Text>
+            <Text style={styles.addFund}>Add fund:</Text>
             <TextInput
               style={styles.textInput}
               onChangeText={setFund}
               value={fund}
               keyboardType="numeric"
             />
-             <Text style={styles.unit}>SOL</Text>
+            <Text style={styles.unit}>SOL</Text>
           </View>
-
-          <Pressable onPress={() => setModalState(false)}>
-            <Text>Close</Text>
-          </Pressable>
-          <Pressable onPress={() => setModalState(false)}>
-            <Text>Confirm</Text>
-          </Pressable>
+          <View style={styles.btnContainer}>
+            <Pressable
+              onPress={() => {
+                setFund(0);
+                setModalState(false);
+              }}
+              style={styles.closeBtn}
+            >
+              <Text style={styles.closeBtnText}>Close</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => setModalState(false)}
+              style={styles.confirmBtn}
+            >
+              <Text style={styles.confirmBtnText}>Confirm</Text>
+            </Pressable>
+          </View>
         </View>
       </Modal>
     </View>
