@@ -106,7 +106,7 @@ app.post("/check", async (req, res) => {
     if (qr.publicKey !== qrCode.publicKey) {
       return res.status(401).send("Invalid public key");
     }
-
+    
     if (qr.carNumber !== qrCode.carNumber) {
       return res.status(401).send("Invalid car number");
     }
@@ -166,7 +166,7 @@ app.post("/account", async (req, res) => {
   }
 });
 
-app.post("createParking", async (req, res) => {
+app.post("/createParking", async (req, res) => {
   try {
     const { name, address, owner } = req.body;
     let user = await UserModel.findOne({ publickey: owner });

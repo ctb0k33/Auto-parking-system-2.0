@@ -8,20 +8,10 @@ import ParkingDetailImage from "../../components/parking_details/parking_detail_
 import ParkingInformation from "../../components/parking_details/parking_information/ParkingInformation";
 import ParkingComment from "../../components/parking_details/parking_comment/ParkingComment";
 import ParkingRegister from "../../components/parking_details/parking_register/ParkingRegister";
-import { useEffect } from "react";
 import axiosInstance from "../../utils/axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ParkingDetail() {
   const fakeData = parkingList[0];
-  const [item, setItem] = useState(null);
-  const QRImage = async() =>{
-    const qrImage = await AsyncStorage.getItem("Private QR: ");
-    setItem(qrImage);
-  }
-  useEffect(() => {
-    QRImage()
-  }, [item]);
   return (
     // <SafeAreaView>
     <ScrollView>

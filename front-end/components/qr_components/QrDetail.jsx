@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image, FlatList } from "react-native";
-import asyncStorate from '@react-native-async-storage/async-storage';
+import asyncStorage from '@react-native-async-storage/async-storage';
 import styles from './Qr_detail.style';
 
 export default function QrDetail() {
   const [data, setData] = useState([]);
   useEffect(() => {
     const getPrivateQr = async () => {
-      const qr = await asyncStorate.getItem("Private QR");
+      const qr = await asyncStorage.getItem("Private QR");
       data = data.push({id: 1, label: "Private QR", image: {uri: qr.trim()}});
       setData(data)
     };
