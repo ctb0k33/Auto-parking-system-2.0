@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import AutoIncrementFactory from "mongoose-sequence";
-const AutoIncrement = AutoIncrementFactory(mongoose);
 const parkingSchema = new mongoose.Schema(
   {
     // _id field is not explicitly defined here; it will be added by mongoose-sequence

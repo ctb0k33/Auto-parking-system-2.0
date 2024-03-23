@@ -9,7 +9,7 @@ import { checkVehicleType, calculateFee } from "./utils/fee.js";
 import cors from "cors";
 const app = express();
 const port = 3000;
-
+import verify from "./utils/verify.js";
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({origin: true, credentials: true}));
@@ -51,70 +51,13 @@ app.get("parkingOwner/:id", async (req, res) => {
   }
 });
 
-app.get("/1qr", async (req, res) => {
-  try {
-    const qr = await OnetimeQrModel.find();
-    res.status(200).json(qr);
-  } catch (error) {
-    console.error("Error in /1qr route", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.post("/qr", async (req, res) => {
-  try {
-    const { publicKey, carNumber, randomString } = req.body;
-    let user = await UserModel.findOne({ publickey: publicKey });
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-
-    if (user.randomString !== randomString) {
-      return res.status(401).send("Invalid random string");
-    }
-
-
-    const qrCode = {
-      randomString: uuidv4(),
-      publicKey,
-      carNumber,
-    };
-
-    await OnetimeQrModel.create(qrCode);
-
-    qrcode.toDataURL(JSON.stringify(qrCode), (err, url) => {
-      if (err) {
-        console.error("Error generating QR code", err);
-        return res.status(500).send("Error generating QR code");
-      }
-      res.status(200).json({ qrCode: url });
-    });
-  } catch (error) {
-    console.error("Error in /create1qr route", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
 
 app.post("/check", async (req, res) => {
   try {
     const { qrCode } = req.body;
-    const qr = await OnetimeQrModel.findOne({ id: qrCode.id });
-    if (!qr) {
-      return res.status(404).send("QR code not found");
+    if(!verify(qrCode.msg,qrCode.sig,qrCode.pu)) {
+      res.status(400).send("invalid ")
     }
-
-    if (qr.publicKey !== qrCode.publicKey) {
-      return res.status(401).send("Invalid public key");
-    }
-
-    if (qr.carNumber !== qrCode.carNumber) {
-      return res.status(401).send("Invalid car number");
-    }
-
-    if (qr.randomString !== qrCode.randomString) {
-      return res.status(401).send("Invalid qr");
-    }
-
     const fee = calculateFee(checkVehicleType(qr.carNumber));
     res.status(200).json({ fee: fee });
   } catch (error) {
@@ -202,6 +145,7 @@ app.delete("/qr/:carNumber", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+app.get("")
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -7,7 +7,7 @@ import {
 import bs58 from "bs58";
 import { Buffer } from "buffer";
 import * as Linking from "expo-linking";
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useCallback } from "react";
 import { Text, View } from "react-native";
 import "react-native-get-random-values";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -22,15 +22,17 @@ import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../utils/axios";
 import { GET_API } from "../../api";
 import { POST_API } from "../../api";
-
+import { v4 as uuidv4 } from uuid;
 global.Buffer = global.Buffer || Buffer;
 
 const onConnectRedirectLink = Linking.createURL("onConnect");
 const onDisconnectRedirectLink = Linking.createURL("onDisconnect");
+const onSignMessageRedirectLink = Linking.createURL("onSignMessage");
 
 const connection = new Connection(clusterApiUrl("devnet"));
 
 export default function ConnectWallet() {
+  const [signMsg, setSignMsg] = useState();
   const [publicKey, setPublicKey] = useState(null);
   const [dappKeyPair] = useState(nacl.box.keyPair());
   const [sharedSecret, setSharedSecret] = useState();
@@ -94,8 +96,21 @@ export default function ConnectWallet() {
       setSession(connectData.session);
       setPublicKey(new PublicKey(connectData.public_key));
       console.log(`connected to ${connectData.public_key.toString()}`);
+      console.log(`shared secret when connect: ${sharedSecretDapp}`);
     }
 
+    if (/onSignMessage/.test(url.pathname)) {
+      setSignMsg(params.get("data"));
+      const data = decryptPayload(
+        params.get("data"),
+        params.get("nonce"),
+        sharedSecret
+      );
+      console.log("============");
+      console.log("data", data);
+      console.log(`shared secret when sign: ${sharedSecret}`);
+      // console.log(bs58.decode(params.get("data")))
+    }
     if (/onDisconnect/.test(url.pathname)) {
       setPublicKey(null);
       console.log("disconnected");
@@ -133,15 +148,38 @@ export default function ConnectWallet() {
     if (publicKey) {
       const balance = await connection.getBalance(publicKey);
       setBalance(balance / LAMPORTS_PER_SOL);
-      console.log("abcdef")
-      try{
-        const response = await axiosInstance.post(POST_API().createAccount, {publickey: publicKey})
+      console.log("abcdef");
+      try {
+        const response = await axiosInstance.post(POST_API().createAccount, {
+          publickey: publicKey,
+        });
         console.log("response", response);
-      } catch(err){
-        console.log(err)
+      } catch (err) {
+        console.log(err);
       }
-      
     }
+  };
+
+  const signMessage = async () => {
+    const message =uuidv4();
+
+    const payload = {
+      session,
+      message: bs58.encode(Buffer.from(message)),
+    };
+
+    const [nonce, encryptedPayload] = encryptPayload(payload, sharedSecret);
+
+    const params = new URLSearchParams({
+      dapp_encryption_public_key: bs58.encode(dappKeyPair.publicKey),
+      nonce: bs58.encode(nonce),
+      redirect_link: onSignMessageRedirectLink,
+      payload: bs58.encode(encryptedPayload),
+    });
+    console.log("++++++++++++++++++++");
+    const url = buildUrl("signMessage", params);
+    Linking.openURL(url);
+    // setSignMsg(url)
   };
 
   useEffect(() => {
@@ -169,7 +207,11 @@ export default function ConnectWallet() {
                   2
                 )} SOL`}</Text>
               </View>
-
+              <View style={styles.row}>
+                <Button title="Sign Message" onPress={signMessage} />
+              </View>
+              <Text>{signMsg}</Text>
+              {/* <Text> {bs58.decode(signMsg)}</Text> */}
               <View style={styles.row}>
                 <Button title="Disconnect" onPress={disconnect} />
               </View>
