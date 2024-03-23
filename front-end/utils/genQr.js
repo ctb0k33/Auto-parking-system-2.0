@@ -9,7 +9,6 @@ async function generateQRCodeBase64(publicKey, message, signature) {
     };
     
     const url = await qrcode.toDataURL(JSON.stringify(data));
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA:", url)
     return url;
   } catch (e) {
     console.log(e);

@@ -21,7 +21,6 @@ import { styles } from "./ConnectWallet.style";
 import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../utils/axios";
 import { GET_API } from "../../api";
-import { POST_API } from "../../api";
 import asyncStorage from "@react-native-async-storage/async-storage";
 import generateQRCodeBase64 from "../../utils/genQr";
 import { v4 as uuidv4 } from "uuid";
@@ -42,12 +41,6 @@ export default function ConnectWallet() {
   const [deepLink, setDeepLink] = useState("");
   const [balance, setBalance] = useState(0);
   const [storagePublicKey, setStoragePublicKey] = useState("");
-
-  const navigation = useNavigation();
-  const testAPI = async () => {
-    const response = await axiosInstance.get(GET_API().testGet);
-    console.log(response.data);
-  };
   useEffect(() => {});
   // useEffect(() => {
   //   testAPI();
@@ -81,7 +74,7 @@ export default function ConnectWallet() {
           randomString,
           data.signature
         );
-          
+
         await asyncStorage.setItem("Private QR", url);
 
       } catch (e) {

@@ -1,6 +1,6 @@
 const DELETE_API = (carNumber ) => {
   return {
-    deleteOneTimeQr: `/qr/${carNumber}`,
+    deleteParking: `/parking/${carNumber}`,
   };
 };
 

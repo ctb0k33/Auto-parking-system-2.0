@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, Text, Button, Pressable, TextInput } from "react-native";
 import { Modal } from "../../common/Modal";
 import { styles } from "./parkingRegister.style";
+import { useNavigation } from "@react-navigation/native";
 
 // function onPressLearnMore() {
 //   Alert.alert(
@@ -25,6 +26,7 @@ import { styles } from "./parkingRegister.style";
 export default function ParkingRegister({ contractId }) {
   const [modalState, setModalState] = useState(false);
   const [fund, setFund] = useState(0);
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={styles.contract}>Parking Register</Text>
@@ -34,7 +36,7 @@ export default function ParkingRegister({ contractId }) {
       </View>
       <Button
         onPress={() => {
-          setModalState(true);
+          navigation.navigate("QR");
         }}
         title="Register"
         color="green"

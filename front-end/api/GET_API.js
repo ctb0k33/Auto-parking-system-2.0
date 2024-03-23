@@ -1,11 +1,10 @@
 const GET_API = (id) => {
   return {
-    hello:"",
-    testGet:"/breeds/image/random",
     getAllParking:"/parking",
     getParkingRegisted: `/parkingRegisted/${id}`,
     getParkingOwner:`/parkingOwner/${id}`,
-
+    getParking: `/parking/${id}`,
+    getAllOwnedParking:`parking/owned/${id}`
   };
 };
 

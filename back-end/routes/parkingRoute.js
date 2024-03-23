@@ -13,9 +13,9 @@ parkingRouter
   .route("/")
   .get(getAllParking)
   .post(createParking)
-  .patch(updateParking)
-  .delete(deleteParking);
 parkingRouter.get("/:id", getParking);
 parkingRouter.get("/owned/:id", getAllOwnedParking);
+parkingRouter.patch("/:id", updateParking);
+parkingRouter.delete("/:id", deleteParking);
 
 export default parkingRouter;

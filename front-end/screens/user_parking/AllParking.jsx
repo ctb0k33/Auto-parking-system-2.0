@@ -16,10 +16,8 @@ const AllParking = ({ navigation }) => {
     setError(null);
     try {
       const response = await axiosInstance.get(GET_API().getAllParking)
-      console.log("hello", GET_API().getAllParking)
       const data = response.data;
-      setParkings(data);
-      console.log(data);
+      setParkings(data.data.data);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -30,12 +28,15 @@ const AllParking = ({ navigation }) => {
     fetchParkingData();
   }, []);
   useEffect(() => {
-    // Filter parkings when searchTerm changes
-    const results = parkings.filter(parking =>
-      parking.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredParkings(results);
-  }, [searchTerm, parkings]);
+    if (parkings != undefined && parkings != null && parkings != []){
+      console.log(parkings)
+      // Filter parkings when searchTerm changes
+      const results = parkings.filter(parking =>
+        parking.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredParkings(results);
+    }
+  }, [searchTerm]);
 
   if (isLoading) {
     return <Text>Loading...</Text>;
