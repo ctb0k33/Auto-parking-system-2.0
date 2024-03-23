@@ -18,7 +18,6 @@ export default function App() {
         <Drawer.Screen name="ConnectWallet" component={ConnectWallet} />
         <Drawer.Screen name="ParkingDetail" component={ParkingDetail} />
         <Drawer.Screen name="ParkingList" component={ParkingList} />
-        <Drawer.Screen name="AddEditParking" component={AddEditParking} />
         <Drawer.Screen name="Qr" component={Qr} />
       </Drawer.Navigator>
     </NavigationContainer>
