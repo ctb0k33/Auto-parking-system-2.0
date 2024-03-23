@@ -59,7 +59,7 @@ const AllParking = ({ navigation }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.parkingItemContainer}
-            onPress={() => navigation.navigate("ParkingDetail", { id: item._id })}
+            onPress={() => navigation.navigate("ParkingDetail")}
           >
             <View style={styles.itemContainer}>
               <Text style={styles.title}>{item.name}</Text>
