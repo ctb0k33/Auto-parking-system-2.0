@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Image } from "react-native";
 import axiosInstance from "../../utils/axios";
+import { GET_API } from "../../api";
 
 
-const AllParking = ({navigation}) => {
+const AllParking = ({ navigation }) => {
   const [parkings, setParkings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,7 +15,8 @@ const AllParking = ({navigation}) => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.get("/parking");
+      const response = await axiosInstance.get(GET_API().getAllParking)
+      console.log("hello", GET_API().getAllParking)
       const data = response.data;
       setParkings(data);
       console.log(data);
@@ -26,7 +28,7 @@ const AllParking = ({navigation}) => {
   };
   useEffect(() => {
     fetchParkingData();
-  },[]);
+  }, []);
   useEffect(() => {
     // Filter parkings when searchTerm changes
     const results = parkings.filter(parking =>
@@ -57,10 +59,14 @@ const AllParking = ({navigation}) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.parkingItemContainer}
-            onPress={() => navigation.navigate("ParkingDetail", { id: item._id })}
+            onPress={() => navigation.navigate("ParkingDetail")}
           >
             <View style={styles.itemContainer}>
-              <Text style={styles.title}>Name: {item.name}</Text>
+              <Text style={styles.title}>{item.name}</Text>
+              <Image
+                source={require('../../assets/images/nha_xe_dhqg.jpg')}
+                style={styles.picture}
+              />
               <Text style={styles.text}>Address: {item.address}</Text>
               <Text style={styles.text}>Rating: {item.rating}</Text>
               <Text style={styles.text}>Images Count: {item.images.length}</Text>
@@ -77,11 +83,12 @@ const AllParking = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5", // Adds a light background color for contrast
+    backgroundColor: "#f5f5f5",
+    paddingTop: 10, // Add space at the top of the container
   },
   searchBar: {
     fontSize: 18,
-    borderColor: '#007AFF', // Use a color that matches your app theme
+    borderColor: '#007AFF',
     borderWidth: 1,
     paddingLeft: 10,
     paddingRight: 10,
@@ -89,21 +96,22 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     borderRadius: 10,
     margin: 12,
-    backgroundColor: "#fff", // White background for the input
+    backgroundColor: "#fff",
+    marginBottom: 10, // Add space at the bottom of the search bar
   },
   parkingItemContainer: {
-    backgroundColor: '#fff', // White background for each item
+    backgroundColor: '#fff',
     marginVertical: 5,
     marginHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 10, // Increase border radius for smoother corners
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4, // Adds shadow for elevation effect
+    shadowOpacity: 0.3, // Adjust shadow opacity for better effect
+    shadowRadius: 4,
+    elevation: 5,
   },
   itemContainer: {
     padding: 20,
@@ -112,11 +120,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    marginBottom: 5, // Adds space below the title
+    marginBottom: 12,
+    textAlign: 'center',
+    color: '#333', // Change title color for better readability
   },
   text: {
-    marginBottom: 5, // Adds space between texts for better readability
+    marginBottom: 5,
+    color: '#666', // Change text color for better readability
   },
+  picture: {
+    width: '100%',
+    height: 250,
+    cover: 'contain',
+    borderRadius: 12,
+    marginBottom: 12,
+  }
 });
 
 export default AllParking;

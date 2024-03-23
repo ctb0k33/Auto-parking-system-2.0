@@ -11,7 +11,7 @@ const initialParkings = [
   // Add more parking spots here
 ];
 
-const ParkingList = ({route, navigation }) => {
+const ParkingList = ({navigation }) => {
   const [modalState, setModalState] = useState(false);
   const [parkings, setParkings] = useState(initialParkings);
   const [pickedImage, setPickedImage] = useState(null);

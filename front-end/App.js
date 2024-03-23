@@ -30,14 +30,12 @@ export default function App() {
     customInitialRouteName != "" && (
       <NavigationContainer>
         <Drawer.Navigator initialRouteName={customInitialRouteName}>
-          <Drawer.Screen name="Parking Detail" component={ParkingDetail} />
-          <Drawer.Screen name="Connect Wallet" component={ConnectWallet} />
-          <Drawer.Screen name="Parking List" component={ParkingList} />
-          <Drawer.Screen name="AddEdit Parking" component={AddEditParking} />
+        <Drawer.Screen name="Connect Wallet" component={ConnectWallet} />
+          <Drawer.Screen name="My Parking" component={ParkingList} />
           <Stack.Screen
             name="AllParking"
             component={AllParking}
-            options={{ title: "Parking Spot" }}
+            options={{ title: "Parking List" }}
           />
           <Drawer.Screen name="QR" component={Qr} />
         </Drawer.Navigator>
