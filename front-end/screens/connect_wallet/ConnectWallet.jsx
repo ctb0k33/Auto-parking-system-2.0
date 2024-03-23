@@ -73,7 +73,6 @@ export default function ConnectWallet() {
   useEffect(() => {
     const saveDataInStorage = async (data) => {
       try {
-        console.log("datahahahahahahaha",data)
         await asyncStorage.setItem("publicKey", data.publicKey);
         await asyncStorage.setItem("signature", data.signature);
         let randomString = uuidv4();
@@ -82,7 +81,7 @@ export default function ConnectWallet() {
           randomString,
           data.signature
         );
-        console.log("URLLLLLLLL",url)
+          
         await asyncStorage.setItem("Private QR", url);
 
       } catch (e) {

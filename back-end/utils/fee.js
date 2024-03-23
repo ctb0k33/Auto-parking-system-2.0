@@ -14,10 +14,10 @@ const checkVehicleType = (plate) => {
 const calculateFee = (vehicleType) => {
     let fee=0
     if(vehicleType==="car"){
-        fee+=100
+        fee+=3
     }
     else if(vehicleType==="motorcycle"){
-        fee+=50
+        fee+=1
     }
 
     return fee

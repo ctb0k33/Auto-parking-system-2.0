@@ -16,10 +16,11 @@ const parkingSchema = new mongoose.Schema(
     fare: [Number],
     maximumCapacity: Number,
     service: [String],
-    contractId: {
-      type: String,
-      unique: true,
-    },
+    contractId:String
+    // contractId: {
+    //   type: String,
+    //   unique: true,
+    // },
   },
   {
     timestamps: true,

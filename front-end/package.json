@@ -22,6 +22,8 @@
     "expo-image-picker": "~14.7.1",
     "expo-linking": "~6.2.2",
     "expo-status-bar": "~1.11.1",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
     "qrcode": "^1.5.3",
     "react": "18.2.0",
     "react-native": "0.73.6",

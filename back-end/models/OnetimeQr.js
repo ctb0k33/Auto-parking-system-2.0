@@ -3,10 +3,8 @@ const onetimeQrSchema = new mongoose.Schema(
   {
     enterTime: Date,
     publicKey: String,
-    randomString: String,
-    type: String,
-    carNumber: String,
-    randomString: String,
+    licensePlate: String,
+    carProperty: String,
   },
   {
     timestamps: true,
