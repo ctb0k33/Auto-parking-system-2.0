@@ -22,6 +22,7 @@ import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../utils/axios";
 import { GET_API } from "../../api";
 import { POST_API } from "../../api";
+import asyncStorage from "@react-native-async-storage/async-storage"
 
 global.Buffer = global.Buffer || Buffer;
 
@@ -43,6 +44,9 @@ export default function ConnectWallet() {
     const response = await axiosInstance.get(GET_API().testGet);
     console.log(response.data);
   };
+  useEffect(()=>{
+
+  })
   // useEffect(() => {
   //   testAPI();
   // }, []);
