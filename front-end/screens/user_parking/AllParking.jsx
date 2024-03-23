@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Image } from "react-native";
 import axiosInstance from "../../utils/axios";
 import { GET_API } from "../../api";
+import {useNavigation} from "@react-navigation/native";
 
-
-const AllParking = ({ navigation }) => {
+const AllParking = () => {
+  const navigation = useNavigation();
   const [parkings, setParkings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -59,7 +60,7 @@ const AllParking = ({ navigation }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.parkingItemContainer}
-            onPress={() => navigation.navigate("ParkingDetail")}
+            onPress={() => navigation.navigate("ParkingDetail", { id: item._id })}
           >
             <View style={styles.itemContainer}>
               <Text style={styles.title}>{item.name}</Text>
