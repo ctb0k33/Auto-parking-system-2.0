@@ -6,32 +6,26 @@ import styles from "./Qr_detail.style";
 export default function QrDetail() {
   const [data, setData] = useState([]);
   useEffect(() => {
-    const temp = async () => {
-      try {
-        const keys = await asyncStorage.getAllKeys();
-        console.log(keys);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    temp();
     const getPrivateQr = async () => {
       try {
         const qr = await asyncStorage.getItem("Private QR");
-        data = data.push({
-          id: 1,
-          label: "Private QR",
-          image: { uri: qr.trim() },
-        });
-        setData(data);
+        // Use functional update form to ensure immutability and reliance on the latest state
+        setData(currentData => [
+          ...currentData, // Spread the current data to maintain previous entries
+          {
+            id: Date.now().toString(), // Example of generating a unique ID based on timestamp
+            label: "Private QR",
+            image: { uri: qr },
+          },
+        ]);
       } catch (e) {
         console.log(e);
       }
     };
     getPrivateQr();
   }, []);
+  
   // Sample data for FlatList
-
   return (
     <View style={styles.container}>
       <FlatList

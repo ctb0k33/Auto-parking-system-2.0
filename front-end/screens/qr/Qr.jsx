@@ -2,7 +2,6 @@ import QrDetail from "../../components/qr_components/QrDetail";
 import { Modal, View, Text, TextInput, Button, StyleSheet, TouchableOpacity,ScrollView } from 'react-native';
 import React, { useState } from 'react';
 
-
 export default function Qr() {
   const [isWithdrawalModalVisible, setIsWithdrawalModalVisible] = useState(false);
   const [isFundModalVisible, setIsFundModalVisible] = useState(false);

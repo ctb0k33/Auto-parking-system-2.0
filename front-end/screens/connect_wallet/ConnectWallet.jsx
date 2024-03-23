@@ -48,10 +48,12 @@ export default function ConnectWallet() {
     const response = await axiosInstance.get(GET_API().testGet);
     console.log(response.data);
   };
-  useEffect(() => {});
-  // useEffect(() => {
-  //   testAPI();
-  // }, []);
+
+  useEffect(() => {
+    asyncStorage.setItem("Private QR", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMQAAADECAIAAABPxBk8AAAAAXNSR0IB2cksfwAABWlJREFUeJzt3UGO3DAMRNF0kPtfebL1hgAJ/pLVg/+Wgcf2JAWFkGTq8/Pz80ci/H37BfR7GCZhDJMwhkkYwySMYRLGMAljmIQxTMIYJmEMkzCGSRjDJIxhEsYwCfNv+gOfzwd/ieeequr+1TWdn0282+bPnza/y8nfvcORSRjDJIxhEmZcMz1t9o9v/o+vntupS6rrN3VP51kd02dV3vp3cWQSxjAJY5iEWdVMT9N5kek1m3mX6RxP532o53buM32fzrM296w4MgljmIQxTMJgNROFWmOi6jNqTZD6vai5qARHJmEMkzCGSZjraqbNHp235m+odbTEnqSTHJmEMUzCGCZhsJopMeeR2G9U3X/zPptnpeukk3NRjkzCGCZhDJMwq5op8f89NX+z2btN7QGf3ue2dcApRyZhDJMwhkmYcc301h6aTt1A1TfVczv32aD6DrzFkUkYwySMYRJm1Z9p01epQtUKiTqmeu4N+5ASvaDsz6TXGCZhDJMw2DzT5rv6zrM6c0ub+1T3pPakb77jq66Z/p2k6zxHJmEMkzCGSZhPYk0n0a8yse6W6KVEPSs9f0bto39yZBLGMAljmIRZ1Uzpb8fStcVmfSrxDtT9XZvT1zNMwhgmYbD9TJ3rT96nUzdQcz+d96xqlJPzRukz+xyZhDFMwhgmYVb7majzTE72LEg8dzpPQ32LR62rUn8PjkzCGCZhDJMwkT7g0/5DiWs2EvvNT57vm7h/hyOTMIZJGMMkTKQPeOK8tk0d9rTpOZnos9CZAzt5Bt+GI5MwhkkYwyQMVjMl6qTq/hVqT9L0fRLPpfanU9/9dTgyCWOYhDFMwmDfzd1WryQk1rY2c13VfSrU93EVRyZhDJMwhkmY1Xdz1Z9P91xTZ+sm1t2q527qtpNrbek66cmRSRjDJIxhEmY8z5RY60l/bz+9JvGsJ2qejJpzompBRyZhDJMwhkmYVc30Vr2V+P++c/+T9zlZd1oz6TqGSRjDJEykP9PmTLp0nZTuUdm5JlFrdnjenL6GYRLGMAkTOW+ufNjBfksnz1RJ9ymYSpz31+HIJIxhEsYwCRPpaZnoYZ0+p+Wt2mXzPtQ7T8+TqTgyCWOYhDFMwsTPm6O+U+v8bOL7tc17Vtekv+/rSPRrcGQSxjAJY5iEWe1nekr0IOig9jml1wc357Fsrjm5x9+RSRjDJIxhEgbrz0T930ztN6Ik9q1X13T+nOqBOb2mw5FJGMMkjGESJrKf6YmaZ5reJ9G7srqmcvK7ts3fj2en6DqGSRjDJAy2NjdF7SV6SszldN5taroH663eBFOOTMIYJmEMkzCRXgMna5F0T8vqWW/dJ7EO6B5wXccwCWOYhPnKPuCde07vn/i2/2T/zA7nmfQ1DJMwhkkYbJ4p0bMx3fs73T+pc/3muVTNN32HiiOTMIZJGMMkzKpmmtY0b+2zqSTmjU72KaC4NqfrGCZhDJMwR89O6Th5/m4H1Qch0YuBOl+PqmUdmYQxTMIYJmGw/kwb1DpU+lnpuaXN70vVlPYa0BUMkzCGSZhVf6aTZ7El6ifqXJTpPSvp9c302SyOTMIYJmEMkzBYT0vqXN70uWyJ9bL0z3buuflZqgZ1ZBLGMAljmISJ9wGfSqz9UT21N9ds3qeyWSu0D7iuZpiEMUzCXFczbaT3R1PzQ9RZwptnTc9U7nBkEsYwCWOYhDna0zJ9nw6qD+f0noleUNXPpntvVhyZhDFMwhgmYVbzTOl1tM58zLRemdYfiX3oVP+C2zgyCWOYhDFMwlzXn0nfy5FJGMMkjGESxjAJY5iEMUzCGCZhDJMwhkkYwySMYRLGMAljmIQxTMIYJmH+A4FZe76sv2HmAAAAAElFTkSuQmCC");
+    asyncStorage.setItem("publicKey", "GQ");
+  }, [])
+
   useEffect(() => {
     const initializeDeeplinks = async () => {
       const initialUrl = await Linking.getInitialURL();
