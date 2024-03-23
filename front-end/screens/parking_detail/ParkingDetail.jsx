@@ -1,5 +1,5 @@
 import { View, ScrollView } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styles } from "./parkingDetails.style";
 import { commentList } from "../../data/comment";
 import { parkingList } from "../../data/parkingList";
@@ -9,6 +9,7 @@ import ParkingInformation from "../../components/parking_details/parking_informa
 import ParkingComment from "../../components/parking_details/parking_comment/ParkingComment";
 import ParkingRegister from "../../components/parking_details/parking_register/ParkingRegister";
 import axiosInstance from "../../utils/axios";
+
 
 export default function ParkingDetail() {
   const fakeData = parkingList[0];
