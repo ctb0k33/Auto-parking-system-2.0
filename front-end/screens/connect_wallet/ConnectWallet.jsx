@@ -20,9 +20,10 @@ import { encryptPayload } from "../../utils/encryptPayload";
 import { styles } from "./ConnectWallet.style";
 import { useNavigation } from "@react-navigation/native";
 import axiosInstance from "../../utils/axios";
+import { AsyncStorage } from "@react-native-async-storage/async-storage";
 import { GET_API } from "../../api";
 import { POST_API } from "../../api";
-
+import { createQr } from "../../utils/genQr";
 global.Buffer = global.Buffer || Buffer;
 
 const onConnectRedirectLink = Linking.createURL("onConnect");
@@ -37,6 +38,7 @@ export default function ConnectWallet() {
   const [session, setSession] = useState();
   const [deepLink, setDeepLink] = useState("");
   const [balance, setBalance] = useState(0);
+  const [storagePublicKey, setStoragePublicKey] = useState("");
 
   const navigation = useNavigation();
   const testAPI = async () => {
@@ -133,7 +135,8 @@ export default function ConnectWallet() {
     if (publicKey) {
       const balance = await connection.getBalance(publicKey);
       setBalance(balance / LAMPORTS_PER_SOL);
-      console.log("abcdef")
+      await AsyncStorage.setItem("publicKey", publicKey.toString());
+      await AsyncStorage.setItem("Private Qr",createQr.toString());
       try{
         const response = await axiosInstance.post(POST_API().createAccount, {publickey: publicKey})
         console.log("response", response);
@@ -143,16 +146,28 @@ export default function ConnectWallet() {
       
     }
   };
+  const retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("publicKey");
+      if (value !== null) {
+        setStoragePublicKey(value);
+      }      
+    }
+    catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     updateBalance();
+    retrieveData();
   }, [publicKey]);
 
   return (
     <SafeAreaProvider>
       <SafeAreaView>
         <View style={styles.header}>
-          {publicKey ? (
+          {publicKey || storagePublicKey ? (
             <>
               <View style={[styles.row, styles.wallet]}>
                 <View style={styles.greenDot} />
