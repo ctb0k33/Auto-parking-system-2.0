@@ -1,83 +1,78 @@
 use anchor_lang::prelude::*;
-use std::str::FromStr;
 
 declare_id!("2fNDYYpjb7EQRdRfR3FwL1M5sJ95LbBY8TMJDiBrUWXx");
 
-/// Constants for Admin and Owner addresses
-const ADMIN_ADDRESS: &str = "BfBNPUANwZhvurFBCR1rZLUvW8MQY4enzLzeAJxsCM8T";
-
-const OWNER_ADDRESS: &str = "6WoVaet3zfK9tJxp7g6psU96jviFvJAthGEQjZE5tFwc";
-
-/// Converts SOL to a fixed-point representation.
-pub fn get_price_from_oracle(sol: f64) -> Result<u64> {
-    Ok((sol * 100.0) as u64)
-}
-
 #[program]
 pub mod smart_contract {
+
     use super::*;
 
-    pub fn initialize(_ctx: Context<Initialize>) -> Result<()> {
+    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+        let park_fund = &mut ctx.accounts.park_fund;
+        park_fund.fund = 0.0;
+        msg!("User account initialized successfully.");
         Ok(())
     }
 
-    /// Updates the state by transferring funds from a user to an owner.
-    pub fn transfer_funds(ctx: Context<FundOperations>, amount: f64) -> Result<()> {
-        let sender = ctx.accounts.user.key();
-        require!(sender == Pubkey::from_str(ADMIN_ADDRESS).unwrap(), ErrorCode::TransferFailed);
+    pub fn get_fund(ctx: Context<Deposit>) -> Result<f64> {
+        let park_fund = &ctx.accounts.park_fund;
+        msg!("Fund balance: {:?}", park_fund.fund);
+        Ok(park_fund.fund)
+    }
 
-        // Placeholder for funds transfer logic.
-        // TODO: Implement the logic to transfer funds.
-        
+    pub fn deposit(ctx: Context<Deposit>, amount: f64) -> Result<()> {
+        let park_fund = &mut ctx.accounts.park_fund;
+        msg!("Depositing funds into the account.");
+        park_fund.fund += amount;
+        msg!("Fund deposited successfully.");
         Ok(())
     }
 
-    /// Adds funds to the user's account.
-    pub fn add_fund(ctx: Context<FundOperations>, amount: f64) -> Result<()> {
-        let user_stats = &mut ctx.accounts.user_stats;
-        user_stats.fund += amount;
-        Ok(())
-    }
-
-    /// Allows the user to withdraw funds from their account.
-    pub fn user_withdraw(ctx: Context<FundOperations>, amount: f64) -> Result<()> {
-        let user_stats = &mut ctx.accounts.user_stats;
-        require!(user_stats.fund >= amount, ErrorCode::InsufficientFunds);
-        user_stats.fund -= amount;
-        Ok(())
-    }
-
-    /// Allows the owner to withdraw funds.
-    pub fn owner_withdraw(ctx: Context<FundOperations>, amount: f64) -> Result<()> {
-        let user_stats = &mut ctx.accounts.user_stats;
-        require!(user_stats.fund >= amount, ErrorCode::InsufficientFunds);
-        user_stats.fund -= amount;
+    pub fn withdraw(ctx: Context<Withdraw>, amount: f64) -> Result<()> {
+        // require!(
+        //     ctx.accounts.user.key() == ctx.accounts.park_fund.admin,
+        //     ErrorCode::UnauthorizedUser
+        // );
+        let park_fund = &mut ctx.accounts.park_fund;
+        if park_fund.fund < amount {
+            return Err(ErrorCode::InsufficientFunds.into());
+        }
+        park_fund.fund -= amount;
         Ok(())
     }
 }
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct Initialize<'info> {
+    #[account(init, payer = user, space = 8 + 8 + 200,seeds = [b"PARKIN".as_ref(), user.key().as_ref()],bump)]
+    pub park_fund: Account<'info, ParkFund>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
 
 #[account]
 #[derive(Default)]
-pub struct UserStats {
-    name: String,
-    fund: f64,
+pub struct ParkFund {
+    pub admin: Pubkey,
+    pub fund: f64,
 }
 
 /// Context for operations involving funds transfer or modification.
 #[derive(Accounts)]
-pub struct FundOperations<'info> {
+pub struct Deposit<'info> {
+    #[account(mut)]
+    pub park_fund: Account<'info, ParkFund>,
     #[account(mut)]
     pub user: Signer<'info>,
-    #[account(
-        mut,
-        seeds = [b"user-stats", user.key().as_ref()], 
-        bump
-    )]
-    pub user_stats: Account<'info, UserStats>,
-    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct Withdraw<'info> {
+    #[account(mut)]
+    pub park_fund: Account<'info, ParkFund>,
+    #[account(mut)]
+    pub user: Signer<'info>,
 }
 
 #[error_code]
@@ -87,4 +82,7 @@ pub enum ErrorCode {
 
     #[msg("Transfer of funds failed.")]
     TransferFailed,
+
+    #[msg("The user is not authorized to perform this operation.")]
+    UnauthorizedUser,
 }
