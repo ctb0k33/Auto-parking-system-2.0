@@ -17,6 +17,11 @@ export default function QrDetail() {
             label: "Private QR",
             image: { uri: qr },
           },
+          {
+            id: (Date.now()+1).toString(), // Example of generating a unique ID based on timestamp
+            label: "One Time QR",
+            image: { uri: qr },
+          }
         ]);
       } catch (e) {
         console.log(e);
