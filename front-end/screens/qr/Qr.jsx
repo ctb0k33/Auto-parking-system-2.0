@@ -102,23 +102,36 @@ export default function Qr() {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <TextInput
-                style={styles.input}
-                placeholder="Type"
-                value={type}
-                onChangeText={setType}
-                keyboardType="numeric"
-              />
-              <Button
-                title="Submit"
-                style={styles.button}
-                onPress={() => handleSubmit("fund")}
-              />
-              <Button
-                title="Close"
-                style={styles.button}
-                onPress={() => setIsFundModalVisible(false)}
-              />
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>Total: </Text>
+                <TextInput
+                  style={styles.input}
+                  value={type}
+                  onChangeText={setType}
+                  keyboardType="numeric"
+                />
+                <Text style={{ position: "absolute", bottom: 5, right: 10 }}>
+                  SOL
+                </Text>
+              </View>
+              <View style={{display:"flex",flexDirection:"row",gap:20}}>
+                <Button
+                  title="Submit"
+                  style={styles.submitBtn}
+                  onPress={() => handleSubmit("fund")}
+                />
+                <Button
+                  title="Close"
+                  style={styles.closeBtn}
+                  onPress={() => setIsFundModalVisible(false)}
+                />
+              </View>
             </View>
           </View>
         </Modal>
