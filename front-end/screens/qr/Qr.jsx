@@ -4,10 +4,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
+  Alert,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -17,9 +18,15 @@ export default function Qr() {
   const [isFundModalVisible, setIsFundModalVisible] = useState(false);
   const [type, setType] = useState("");
 
-  const handleSubmit = (actionType) => {
+  const handleSubmit = async () => {
     // Handle the submit action here. `actionType` could be 'withdrawal' or 'fund'
-    console.log(`Submit ${actionType}:`, type);
+    Alert.alert(
+      "Success",
+      "Your submission was successful.",
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
 
     // Close the modal
     setIsWithdrawalModalVisible(false);
@@ -34,7 +41,16 @@ export default function Qr() {
         <QrDetail />
         <View style={{ display: "flex", flexDirection: "row", marginTop: 10 }}>
           <TouchableOpacity
-            style={styles.button}
+            style={{backgroundColor: "#0056b3", // Slightly darker blue for more contrast
+            paddingVertical: 14,
+            paddingHorizontal: 30,
+            borderRadius: 30, // More pronounced rounded corners for a pill-like shape
+            elevation: 12, // More pronounced shadow for a floating effect
+            marginVertical: 10, // Add vertical margin for better spacing
+            marginHorizontal:5,
+            justifyContent: 'center', // Center button text or content
+            alignItems: 'center',
+            width: 150,}}
             onPress={() => setIsWithdrawalModalVisible(true)}
           >
             <Text style={styles.buttonText}>Withdraw</Text>
@@ -42,7 +58,16 @@ export default function Qr() {
 
           {/* Fund Button */}
           <TouchableOpacity
-            style={styles.deposit}
+            style={{backgroundColor: "green", // Slightly darker blue for more contrast
+            paddingVertical: 14,
+            paddingHorizontal: 30,
+            borderRadius: 30, // More pronounced rounded corners for a pill-like shape
+            elevation: 12, // More pronounced shadow for a floating effect
+            marginVertical: 10, // Add vertical margin for better spacing
+            marginHorizontal:5,
+            justifyContent: 'center', // Center button text or content
+            alignItems: 'center',
+            width: 150,}}
             onPress={() => setIsFundModalVisible(true)}
           >
             <Text style={styles.buttonText}>Deposit</Text>
@@ -59,6 +84,7 @@ export default function Qr() {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Withdrawal</Text>
               <View
                 style={{
                   display: "flex",
@@ -77,17 +103,13 @@ export default function Qr() {
                   SOL
                 </Text>
               </View>
-              <View style={{display:"flex",flexDirection:"row",gap:20}}>
-                <Button
-                  title="Submit"
-                  style={styles.submitBtn}
-                  onPress={() => handleSubmit("withdrawal")}
-                />
-                <Button
-                  title="Close"
-                  style={styles.closeBtn}
-                  onPress={() => setIsWithdrawalModalVisible(false)}
-                />
+              <View style={{display:"flex",flexDirection:"row"}}>
+                <Pressable style={[styles.button, styles.closeBtn]} onPress={() => setIsWithdrawalModalVisible(false)}>
+                  <Text style={styles.buttonText}>Close</Text>
+                </Pressable>
+                <Pressable style={[styles.button, styles.submitBtn]} onPress={() => handleSubmit('withdrawal')}>
+                  <Text style={styles.buttonText}>Submit</Text>
+                </Pressable>
               </View>
             </View>
           </View>
@@ -102,6 +124,7 @@ export default function Qr() {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>Deposit</Text>
               <View
                 style={{
                   display: "flex",
@@ -120,21 +143,18 @@ export default function Qr() {
                   SOL
                 </Text>
               </View>
-              <View style={{display:"flex",flexDirection:"row",gap:20}}>
-                <Button
-                  title="Submit"
-                  style={styles.submitBtn}
-                  onPress={() => handleSubmit("fund")}
-                />
-                <Button
-                  title="Close"
-                  style={styles.closeBtn}
-                  onPress={() => setIsFundModalVisible(false)}
-                />
+              <View style={{display:"flex",flexDirection:"row"}}>
+                <Pressable style={[styles.button, styles.closeBtn]} onPress={() => setIsFundModalVisible(false)}>
+                  <Text style={styles.buttonText}>Close</Text>
+                </Pressable>
+                <Pressable style={[styles.button, styles.submitBtn]} onPress={() => handleSubmit('withdrawal')}>
+                  <Text style={styles.buttonText}>Submit</Text>
+                </Pressable>
               </View>
             </View>
           </View>
         </Modal>
+
       </View>
     </ScrollView>
   );
@@ -151,14 +171,12 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 30,
     borderRadius: 30, // More pronounced rounded corners for a pill-like shape
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
     elevation: 12, // More pronounced shadow for a floating effect
-    margin: 12,
-    width: 150,
     marginVertical: 10, // Add vertical margin for better spacing
+    marginHorizontal:5,
+    justifyContent: 'center', // Center button text or content
+    alignItems: 'center',
+    width: 122, // Set a fixed width for the button
   },
   deposit: {
     backgroundColor: "green", // Slightly darker blue for more contrast
@@ -177,7 +195,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 18, // Slightly larger text for readability
-    fontWeight: "600", // Medium font weight for emphasis
+    fontWeight: "bold", // Medium font weight for emphasis
     textAlign: "center", // Ensure text is centered
   },
   modalView: {
@@ -214,16 +232,21 @@ const styles = StyleSheet.create({
   },
   submitBtn: {
     backgroundColor: "#0056b3", // Slightly darker blue for more contrast
-    padding: 10,
-    borderRadius: 5, // Slightly rounded corners for the button
-    width: 100, // Set a fixed width for the button
-    margin: 5, // Add margin around the button for spacing
   },
   closeBtn: {
-    backgroundColor: "red", // Red color for contrast
-    padding: 10,
-    borderRadius: 5, // Slightly rounded corners for the button
-    width: 100, // Set a fixed width for the button
-    margin: 5, // Add margin around the button for spacing
+    backgroundColor: "red", // Red color for contrast // Add margin around the button for spacing
+  },
+  modalTitle: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // Evenly space the buttons within the container
+    marginTop: 20, // Add some margin at the top for spacing
+    width: '100%', // Ensure the container takes up the full width of its parent
+    paddingHorizontal: 10, // Add padding to prevent buttons from touching the container edges
   },
 });
