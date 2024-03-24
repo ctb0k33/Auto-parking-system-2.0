@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 250,
-    resizeMode: 'cover',
+    resizeMode: "cover",
     borderRadius: 10, // Rounded corners for the image
     marginBottom: 15,
   },
