@@ -18,6 +18,7 @@ const AllParking = () => {
     try {
       const response = await axiosInstance.get(GET_API().getAllParking)
       const data = response.data;
+      console.log(data)
       setParkings(data.data.data);
     } catch (error) {
       setError(error.message);
@@ -37,7 +38,7 @@ const AllParking = () => {
       );
       setFilteredParkings(results);
     }
-  }, [searchTerm]);
+  }, [parkings,searchTerm]);
 
   if (isLoading) {
     return <Text>Loading...</Text>;

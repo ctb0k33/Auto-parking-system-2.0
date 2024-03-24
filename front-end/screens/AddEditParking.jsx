@@ -2,23 +2,26 @@ import React, { useEffect, useState } from "react";
 import { View, TextInput, Text, Pressable, StyleSheet, Image, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-const AddEditParking = ({ route,navigation }) => {
+const AddEditParking = ({ route, navigation }) => {
   const { parking, updateParkings } = route.params;
   const [name, setName] = useState(parking?.name || "");
   const [location, setLocation] = useState(parking?.location || "");
   const [image, setImage] = useState(parking?.image || "");
 
   const handleImagePick = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permissionResult.granted) {
-      Alert.alert("Permission Required", "Permission to access camera roll is required to select an image!");
-      return;
-    }
-
-    const pickerResult = await ImagePicker.launchImageLibraryAsync();
-    if (!pickerResult.cancelled) {
-      const selectedAsset = pickerResult.assets[0];
-      setImage(`${selectedAsset.uri}?${new Date().getTime()}`);
+    try {
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permissionResult.granted) {
+        Alert.alert("Permission Required", "Permission to access camera roll is required to select an image!");
+        return;
+      }
+      const pickerResult = await ImagePicker.launchImageLibraryAsync();
+      if (!pickerResult.cancelled) {
+        const selectedAsset = pickerResult.assets[0];
+        setImage(`${selectedAsset.uri}?${new Date().getTime()}`);
+      }
+    } catch (error) {
+      console.error("ImagePicker Error: ", error);
     }
   };
 

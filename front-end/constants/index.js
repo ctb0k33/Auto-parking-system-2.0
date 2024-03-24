@@ -1,7 +1,9 @@
-import { PublicKey } from "@solana/web3.js";
 
 
 export const BASE_URL = "https://phantom.app/ul/v1/";
+export const DEVNET = "https://api.devnet.solana.com";
+export const MAINNET = "https://api.mainnet-beta.solana.com";
+export const TESTNET = "https://api.testnet.solana.com";
 
 export const COLORS = {
   GREEN: "#21E56F",

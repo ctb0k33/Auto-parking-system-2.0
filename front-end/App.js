@@ -43,7 +43,7 @@ export default function App() {
   return (
     customInitialRouteName !== "" && (
       <NavigationContainer>
-        <Drawer.Navigator initialRouteName={customInitialRouteName}>
+        <Drawer.Navigator initialRouteName="Connect Wallet">
           <Drawer.Screen name="Connect Wallet" component={ConnectWallet} />
           <Drawer.Screen name="My Parking" component={ParkingList} />
           <Stack.Screen
